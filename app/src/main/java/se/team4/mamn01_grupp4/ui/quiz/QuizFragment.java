@@ -17,6 +17,20 @@ import se.team4.mamn01_grupp4.R;
  * create an instance of this fragment.
  */
 public class QuizFragment extends Fragment {
+
+
+    /*
+        TODO:
+         * Försök hitta en bra lösning på att skaka telefonen åt höger/vänster.
+            Kanske detta kan vara något...
+            https://stackoverflow.com/questions/6224577/detect-shaking-of-device-in-left-or-right-direction-in-android
+         * Lägg in riktiga UI komponenter istället för placeholder bilden
+         * Animera telefonen och pilarna för att hinta om interaktionen
+         * Hämta data från modellen
+         * Feedback vid rätt/fel svar, ev. som navigering.
+    */
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
