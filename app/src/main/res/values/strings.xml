@@ -2,6 +2,7 @@
     <string name="app_name">MAMN01-grupp4</string>
     <string name="splash_screen_text">Team 4 Splashscreen!</string>
     <string name="title_home">Home</string>
+    <string name="title_quiz">Quiz</string>
     <string name="title_map">Map</string>
     <string name="title_scan">Scan</string>
     <string name="title_activity_maps">Map</string>
