@@ -8,7 +8,7 @@
 
     <string name="tfe_ic_camera_error" translation_description="Error regarding camera support[CHAR_LIMIT=40]">This device doesn\'t support Camera2 API.</string>
     <string name="tfe_ic_gpu_quant_error" translation_description="Error regarding GPU support for Quant models[CHAR_LIMIT=60]">GPU does not yet supported quantized models.</string>
-    <string name="tfe_ic_model" translatable="false">Model:</string>
+    <string name="tfe_ic_model">Model:</string>
     <string-array name="tfe_ic_models" translatable="false">
         <item>Quantized_EfficientNet</item>
         <item>Float_EfficientNet</item>
@@ -16,7 +16,7 @@
         <item>Float_MobileNet</item>
     </string-array>
 
-    <string name="tfe_ic_device" translatable="false">Device:</string>
+    <string name="tfe_ic_device">Device:</string>
     <string-array name="tfe_ic_devices" translatable="false">
         <item>CPU</item>
         <item>GPU</item>
@@ -32,5 +32,5 @@ Vestibulum feugiat orci nec est faucibus vestibulum. Vivamus vel ante ut nulla s
 Nunc mattis nibh in placerat euismod. Quisque consectetur et quam in volutpat. Nulla suscipit pharetra facilisis. Curabitur porta metus et consequat fermentum. Mauris vel odio et lorem accumsan mattis. Duis tellus nisl, porttitor elementum venenatis at, tempor in elit. In ullamcorper urna non elit cursus auctor. Vivamus luctus, nunc vel dapibus euismod, quam ex euismod enim, eu ultrices augue dui sit amet tortor. Nullam nec lectus eu erat volutpat tempus. Duis a lorem risus. Suspendisse quis aliquam justo. In quis lacinia est. Nulla facilisi. Suspendisse nec erat eu felis accumsan facilisis.
 
 Nulla efficitur porta enim ut porta. Vivamus fringilla, nunc nec dignissim pharetra, nisl ex ultrices mi, sit amet porta tellus odio vel dolor. Vivamus eu justo est. Suspendisse potenti. Praesent sollicitudin non nunc id bibendum. Proin sodales massa quis quam volutpat, vel vehicula nulla fermentum. Maecenas in euismod nunc. Praesent sollicitudin, quam nec tincidunt aliquam, nunc mi semper purus, a faucibus libero lorem sit amet urna. Proin ut lacinia ex.</string>
-    <string name="text_start">":) "</string>
+    <string name="text_start">"Shake to find objects! "</string>
 </resources>
