@@ -1,0 +1,4 @@
+0 Universitetsbyggnaden
+1 Domkyrkan
+2 Monumentet
+3 Universitetsbiblioteket

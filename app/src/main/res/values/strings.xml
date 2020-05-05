@@ -5,6 +5,24 @@
     <string name="title_map">Map</string>
     <string name="title_scan">Scan</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="tfe_ic_camera_error" translation_description="Error regarding camera support[CHAR_LIMIT=40]">This device doesn\'t support Camera2 API.</string>
+    <string name="tfe_ic_gpu_quant_error" translation_description="Error regarding GPU support for Quant models[CHAR_LIMIT=60]">GPU does not yet supported quantized models.</string>
+    <string name="tfe_ic_model" translatable="false">Model:</string>
+    <string-array name="tfe_ic_models" translatable="false">
+        <item>Quantized_EfficientNet</item>
+        <item>Float_EfficientNet</item>
+        <item>Quantized_MobileNet</item>
+        <item>Float_MobileNet</item>
+    </string-array>
+
+    <string name="tfe_ic_device" translatable="false">Device:</string>
+    <string-array name="tfe_ic_devices" translatable="false">
+        <item>CPU</item>
+        <item>GPU</item>
+        <item>NNAPI</item>
+    </string-array>
+
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed risus ac neque feugiat placerat ut eu elit. Nam pulvinar congue porttitor. Cras a ipsum dolor. Suspendisse potenti. Cras congue pellentesque enim, in ultrices dui rhoncus eu. Aenean congue massa lacinia scelerisque dapibus. Pellentesque eget consectetur nibh. Nunc erat velit, commodo non lacinia non, sagittis et est. Aenean dolor odio, molestie et lorem sed, aliquet accumsan quam. Maecenas vestibulum non ipsum a ornare. Nunc pretium metus eget ex aliquet sodales. Donec blandit tellus ac felis tristique, ut dignissim metus sagittis. Donec condimentum tempor mattis. Mauris sollicitudin, lorem eget bibendum ullamcorper, ante nisi imperdiet arcu, lobortis lobortis felis urna sit amet eros. Mauris suscipit risus a velit efficitur accumsan. Nulla imperdiet nibh sed velit faucibus, ut venenatis diam maximus.
 
 Proin consectetur mauris risus. Ut id pretium nisl. Vestibulum ac augue ut elit maximus porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec porta aliquet est eget porta. Sed et gravida dolor. Quisque imperdiet, ligula a accumsan gravida, lorem augue aliquet nulla, sit amet pellentesque augue lacus a urna.
