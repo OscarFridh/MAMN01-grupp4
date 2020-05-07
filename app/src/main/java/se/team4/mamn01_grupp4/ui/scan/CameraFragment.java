@@ -98,6 +98,7 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   private static final Logger LOGGER = new Logger();
   private static final int PERMISSIONS_REQUEST = 1;
 
+  private int popupWindowValue = 35;
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
   private Handler handler;
   private View root;
@@ -134,9 +135,6 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     } else {
       requestPermission();
     }
-
-    QuizWindow quizWindow = new QuizWindow();
-    quizWindow.showPopupWindow(root);
 
     bottomSheetLayout = root.findViewById(R.id.bottom_sheet_layout);
     gestureLayout = root.findViewById(R.id.gesture_layout);
@@ -508,6 +506,10 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
       if (recognition != null) {
         if (recognition.getTitle() != null) recognitionTextView.setText(recognition.getTitle());
         if (recognition.getConfidence() != null)
+          if(recognition.getConfidence()*100 > popupWindowValue){
+            QuizWindow quizWindow = new QuizWindow();
+            quizWindow.showPopupWindow(root);
+          }
           recognitionValueTextView.setText(
               String.format("%.2f", (100 * recognition.getConfidence())) + "%");
       }
