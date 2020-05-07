@@ -88,6 +88,7 @@ import se.team4.mamn01_grupp4.env.Logger;
 import se.team4.mamn01_grupp4.env.ImageUtils;
 import se.team4.mamn01_grupp4.tflite.Classifier.Device;
 import se.team4.mamn01_grupp4.tflite.Classifier.Recognition;
+import se.team4.mamn01_grupp4.ui.quiz.QuizWindow;
 
 public abstract class CameraFragment extends androidx.fragment.app.Fragment
     implements OnImageAvailableListener,
@@ -133,6 +134,9 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     } else {
       requestPermission();
     }
+
+    QuizWindow quizWindow = new QuizWindow();
+    quizWindow.showPopupWindow(root);
 
     bottomSheetLayout = root.findViewById(R.id.bottom_sheet_layout);
     gestureLayout = root.findViewById(R.id.gesture_layout);
