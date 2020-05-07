@@ -2,7 +2,11 @@ package se.team4.mamn01_grupp4.ui.map;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -26,14 +33,17 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.util.HashMap;
 
 import se.team4.mamn01_grupp4.R;
+import se.team4.mamn01_grupp4.env.Logger;
 
 
-public class MapFragment extends Fragment implements OnMapReadyCallback{
+public class MapFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
     private Poi[] poiCoordinates = {
             new Poi(55.70584, 13.19321, "Minplats1", "src", "Beskrivning1"),
             new Poi(55.70584, 13.21, "Minplats2", "ställe", "beskrivning2")
     };
+
+    private static final Logger LOGGER = new Logger();
 
     private HashMap<String, Poi> poiMap = new HashMap<>();
 
@@ -44,6 +54,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private TextView scrollHeader;
     private TextView scrollDesc;
     private GoogleMap mMap;
+    private LocationManager locationManager;
+    LatLng myLatLng;
+    private static final long MIN_TIME = 400;
+    private static final float MIN_DISTANCE = 1000;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +65,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         bottomSheet = root.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -60,6 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
         return root;
     }
+
 
     /**
      * Manipulates the map once available.
@@ -73,16 +89,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         for(Poi marker : poiCoordinates){
             mMap.addMarker(new MarkerOptions().position(marker.location).title(marker.name));
             poiMap.put(marker.name, marker);
         }
+
+        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.70584, 13.19321) , 13) );
+
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 255);
         }
+
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -94,6 +117,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            myLatLng = new LatLng(savedInstanceState.getDouble("myLat"), savedInstanceState.getDouble("myLong"));
+
+            //Restore the fragment's state here
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myLatLng, 13);
+        mMap.animateCamera(cameraUpdate);
+        locationManager.removeUpdates(this);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     private class Poi{
