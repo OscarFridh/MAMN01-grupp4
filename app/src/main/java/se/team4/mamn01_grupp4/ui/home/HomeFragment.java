@@ -73,4 +73,22 @@ public class HomeFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        sm.unregisterListener(sensorListner);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        sm.unregisterListener(sensorListner);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sm.registerListener(sensorListner, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
 }
