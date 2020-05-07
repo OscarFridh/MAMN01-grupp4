@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import se.team4.mamn01_grupp4.R;
 import se.team4.mamn01_grupp4.ui.map.MapFragment;
@@ -50,6 +52,8 @@ public class HomeFragment extends Fragment {
         float y = event.values[1];
         float z = event.values[2];
 
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
         acelLast = acelVal;
         acelVal = (float) Math.sqrt((double)  x*x + y*y + z*z );
         float delta = acelVal - acelLast;
@@ -58,11 +62,7 @@ public class HomeFragment extends Fragment {
 
 
             if(shake > 12){
-                MapFragment nextFrag= new MapFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.homefragment, nextFrag, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
+                navController.navigate(R.id.navigation_map);
             }
 
         }
