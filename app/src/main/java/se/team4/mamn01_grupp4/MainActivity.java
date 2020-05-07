@@ -10,12 +10,18 @@ import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
+
+    private PoiDb poiDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        PoiDb poiDb = PoiDb.getInstance();
+        poiDb.createDb(getAssets());
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -27,4 +33,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
+
+    public PoiDb getPoiDb(){
+        return poiDb;
+    }
+
+
 }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,21 +32,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.HashMap;
+import java.util.Objects;
 
+import se.team4.mamn01_grupp4.MainActivity;
+import se.team4.mamn01_grupp4.Poi;
+import se.team4.mamn01_grupp4.PoiDb;
 import se.team4.mamn01_grupp4.R;
 import se.team4.mamn01_grupp4.env.Logger;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
-    private Poi[] poiCoordinates = {
-            new Poi(55.70584, 13.19321, "Minplats1", "src", "Beskrivning1"),
-            new Poi(55.70584, 13.21, "Minplats2", "ställe", "beskrivning2")
-    };
 
     private static final Logger LOGGER = new Logger();
 
-    private HashMap<String, Poi> poiMap = new HashMap<>();
+    PoiDb poiDb;
 
     private View root;
 
@@ -62,6 +63,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_map, container, false);
+
+        poiDb = ((MainActivity) getActivity()).getPoiDb();
 
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -89,9 +92,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        for(Poi marker : poiCoordinates){
+        for(Poi marker : poiDb.getValues()){
             mMap.addMarker(new MarkerOptions().position(marker.location).title(marker.name));
-            poiMap.put(marker.name, marker);
         }
 
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.70584, 13.19321) , 10) );
@@ -113,7 +115,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 String markerTitle = marker.getTitle();
                 sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 scrollHeader.setText(markerTitle);
-                scrollDesc.setText(poiMap.get(markerTitle).description);
+                scrollDesc.setText(Objects.requireNonNull(poiDb.getPoi(markerTitle)).description);
                 return true;
             }
         });
@@ -152,17 +154,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     }
 
-    private class Poi{
-        public LatLng location;
-        public String name;
-        public String imgSrc;
-        public String description;
-
-        public Poi(double v, double v1, String name, String src, String description){
-            this.location = new LatLng(v, v1);
-            this.name = name;
-            this.description = description;
-            this.imgSrc = src;
-        }
-    }
 }

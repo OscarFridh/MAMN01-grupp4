@@ -34,4 +34,16 @@ Nunc mattis nibh in placerat euismod. Quisque consectetur et quam in volutpat. N
 
 Nulla efficitur porta enim ut porta. Vivamus fringilla, nunc nec dignissim pharetra, nisl ex ultrices mi, sit amet porta tellus odio vel dolor. Vivamus eu justo est. Suspendisse potenti. Praesent sollicitudin non nunc id bibendum. Proin sodales massa quis quam volutpat, vel vehicula nulla fermentum. Maecenas in euismod nunc. Praesent sollicitudin, quam nec tincidunt aliquam, nunc mi semper purus, a faucibus libero lorem sit amet urna. Proin ut lacinia ex.</string>
     <string name="text_start">"Shake to find objects! "</string>
+
+    <string name="title_activity_quiz">QuizActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

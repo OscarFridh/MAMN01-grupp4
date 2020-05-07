@@ -25,11 +25,13 @@ import android.util.Size;
 import android.util.TypedValue;
 import android.view.TextureView;
 
+import se.team4.mamn01_grupp4.MainActivity;
 import se.team4.mamn01_grupp4.R;
 import se.team4.mamn01_grupp4.env.BorderedText;
 import se.team4.mamn01_grupp4.env.Logger;
 import se.team4.mamn01_grupp4.tflite.Classifier;
 import se.team4.mamn01_grupp4.tflite.Classifier.Device;
+import se.team4.mamn01_grupp4.ui.quiz.QuizWindow;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,6 +42,7 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
   private static final float TEXT_SIZE_DIP = 10;
   private Bitmap rgbFrameBitmap = null;
   private long lastProcessingTimeMs;
+  private int popupWindowValue = 35;
   private Integer sensorOrientation;
   private Classifier classifier;
   private BorderedText borderedText;
@@ -86,29 +89,35 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
   protected void processImage() {
     rgbFrameBitmap.setPixels(getRgbBytes(), 0, previewWidth, 0, 0, previewWidth, previewHeight);
     final int cropSize = Math.min(previewWidth, previewHeight);
+    Runnable processTask = new Runnable() {
+      boolean stopped = false;
+      @Override
+      public void run() {
+        if(!stopped) {
+          if (classifier != null) {
+            final long startTime = SystemClock.uptimeMillis();
+            final List<Classifier.Recognition> results =
+                    classifier.recognizeImage(rgbFrameBitmap, sensorOrientation);
 
-    runInBackground(
-        new Runnable() {
-          @Override
-          public void run() {
-            if (classifier != null) {
-              final long startTime = SystemClock.uptimeMillis();
-              final List<Classifier.Recognition> results =
-                  classifier.recognizeImage(rgbFrameBitmap, sensorOrientation);
-              lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
-              LOGGER.v("Detect: %s", results);
+            lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
+            LOGGER.v("Detect: %s", results);
 
-              getActivity().runOnUiThread(
-                  new Runnable() {
-                    @Override
-                    public void run() {
-                      showResultsInBottomSheet(results);
-                    }
-                  });
+            getActivity().runOnUiThread(
+                    new Runnable() {
+                      @Override
+                      public void run() {
+                        showResultsInBottomSheet(results);
+                      }
+                    });
+            if(results.get(0).getConfidence() * 100 > popupWindowValue){
+              showPopup(results.get(0));
             }
-            readyForNextImage();
           }
-        });
+          readyForNextImage();
+        }
+      }
+    };
+    runInBackground(processTask);
   }
 
   @Override

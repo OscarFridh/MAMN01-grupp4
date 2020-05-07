@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -81,13 +82,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.Inflater;
 
+import se.team4.mamn01_grupp4.MainActivity;
+import se.team4.mamn01_grupp4.PoiDb;
 import se.team4.mamn01_grupp4.R;
 import se.team4.mamn01_grupp4.customview.AutoFitTextureView;
 import se.team4.mamn01_grupp4.env.Logger;
 import se.team4.mamn01_grupp4.env.ImageUtils;
 import se.team4.mamn01_grupp4.tflite.Classifier.Device;
 import se.team4.mamn01_grupp4.tflite.Classifier.Recognition;
+import se.team4.mamn01_grupp4.ui.quiz.QuizActivity;
 import se.team4.mamn01_grupp4.ui.quiz.QuizWindow;
 
 public abstract class CameraFragment extends androidx.fragment.app.Fragment
@@ -100,8 +105,10 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
 
   private int popupWindowValue = 35;
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
-  private Handler handler;
+  protected Handler handler;
   private View root;
+  Fragment fragment;
+  private PoiDb poiDb;
   private HandlerThread handlerThread;
   protected int previewWidth = 0;
   protected int previewHeight = 0;
@@ -127,6 +134,7 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     LOGGER.d("onCreate " + this);
     super.onCreate(null);
     getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    poiDb = ((MainActivity) getActivity()).getPoiDb();
 
     root = inflater.inflate(R.layout.fragment_scan, null);
 
@@ -440,7 +448,6 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   }  protected void setFragment() {
     String cameraId = chooseCamera();
 
-    Fragment fragment;
     if (useCamera2API) {
       CameraConnectionFragment camera2Fragment =
               CameraConnectionFragment.newInstance(
@@ -506,14 +513,25 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
       if (recognition != null) {
         if (recognition.getTitle() != null) recognitionTextView.setText(recognition.getTitle());
         if (recognition.getConfidence() != null)
-          if(recognition.getConfidence()*100 > popupWindowValue){
-            QuizWindow quizWindow = new QuizWindow();
-            quizWindow.showPopupWindow(root);
-          }
           recognitionValueTextView.setText(
               String.format("%.2f", (100 * recognition.getConfidence())) + "%");
       }
     }
+  }
+
+  protected void showPopup(Recognition result){
+      try {
+        LOGGER.e("Domkyrkan found");
+        Intent intent = new Intent(getActivity(), QuizActivity.class);
+        Bundle b = new Bundle();
+        b.putString("poi", result.getTitle());
+        intent.putExtras(b);
+        startActivity(intent);
+        getActivity().finish();
+      } catch(Exception e){
+        e.printStackTrace();
+        LOGGER.e("Error finding %s in database", result.getTitle());
+      }
   }
 
   protected Device getDevice() {
