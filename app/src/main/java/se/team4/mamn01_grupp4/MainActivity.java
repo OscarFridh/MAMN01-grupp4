@@ -6,6 +6,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 
@@ -14,14 +15,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.IOException;
 import java.util.HashMap;
 
+import se.team4.mamn01_grupp4.env.Logger;
+
 public class MainActivity extends AppCompatActivity {
 
-    private PoiDb poiDb;
+    private int score = 0;
+    private int answeredQuestions = 0;
+    private Logger LOGGER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PoiDb poiDb = new PoiDb(getAssets());
+        LOGGER = new Logger();
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -34,8 +40,23 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
-    public PoiDb getPoiDb(){
-        return poiDb;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        LOGGER.e("Result aquired");
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (resultCode  == RESULT_OK) {
+
+                int result = data.getIntExtra("result", 0);
+                score += result;
+                answeredQuestions ++;
+                LOGGER.e("Current score is : %s", score);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
 

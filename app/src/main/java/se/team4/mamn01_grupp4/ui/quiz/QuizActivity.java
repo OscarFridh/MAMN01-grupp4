@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +29,7 @@ public class QuizActivity extends AppCompatActivity {
     TextView questionView;
     TextView locationView;
     Logger LOGGER;
+    private int score = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +79,21 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent = getIntent();
+        intent.putExtra("result", score);
+        setResult(RESULT_OK, intent);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
     }
 
 }

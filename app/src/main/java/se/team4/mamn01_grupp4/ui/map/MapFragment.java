@@ -46,8 +46,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private static final Logger LOGGER = new Logger();
 
-    PoiDb poiDb;
-
     private View root;
 
     private LinearLayout bottomSheet;
@@ -63,8 +61,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_map, container, false);
-
-        poiDb = ((MainActivity) getActivity()).getPoiDb();
 
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

@@ -107,7 +107,6 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   protected Handler handler;
   private View root;
   Fragment fragment;
-  private PoiDb poiDb;
   private HandlerThread handlerThread;
   protected int previewWidth = 0;
   protected int previewHeight = 0;
@@ -133,7 +132,6 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     LOGGER.d("onCreate " + this);
     super.onCreate(null);
     getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    poiDb = ((MainActivity) getActivity()).getPoiDb();
 
     root = inflater.inflate(R.layout.fragment_scan, null);
 
@@ -525,7 +523,7 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
         Bundle b = new Bundle();
         b.putString("poi", result.getTitle());
         intent.putExtras(b);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
       } catch(Exception e){
         e.printStackTrace();
         LOGGER.e("Error finding %s in database", result.getTitle());
