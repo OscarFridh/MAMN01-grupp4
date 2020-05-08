@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private BottomSheetBehavior sheetBehavior;
     private TextView scrollHeader;
     private TextView scrollDesc;
+    private ImageView imageView;
     private GoogleMap mMap;
     private LocationManager locationManager;
     LatLng myLatLng;
@@ -69,6 +71,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         bottomSheet = root.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(bottomSheet);
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        imageView = root.findViewById(R.id.reference_image);
         scrollHeader = root.findViewById(R.id.scroll_header);
         scrollDesc = root.findViewById(R.id.scroll_text);
 
@@ -112,6 +115,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 scrollHeader.setText(markerTitle);
                 scrollDesc.setText(Objects.requireNonNull(PoiDb.getDb().get(markerTitle)).description);
+                imageView.setImageDrawable((Objects.requireNonNull(PoiDb.getDb().get(markerTitle)).image));
                 return true;
             }
         });

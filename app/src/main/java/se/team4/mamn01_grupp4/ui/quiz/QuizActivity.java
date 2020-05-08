@@ -47,7 +47,7 @@ public class QuizActivity extends AppCompatActivity {
             player = new MediaPlayer();
             try {
                 player.setDataSource(poi.sound.getFileDescriptor(), poi.sound.getStartOffset(), poi.sound.getLength());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

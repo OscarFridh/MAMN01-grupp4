@@ -34,17 +34,21 @@ public class PoiDb{
         while (myReader.hasNextLine()) {
             String data = myReader.nextLine();
             String[] values = data.split(";");
+            boolean ans;
+            if(values[4] == "ja"){
+            ans = true;
+            } else {
+                ans = false;
+            }
+            Drawable image = null;
+            AssetFileDescriptor sound = null;
             try {
-                boolean ans;
-                if(values[4] == "ja"){
-                    ans = true;
-                } else {
-                    ans = false;
-                }
-                db.put(values[0], new Poi(values[0], values[1], Double.parseDouble(values[2].split(",")[0]), Double.parseDouble(values[2].split(",")[1]), values[3], ans, Drawable.createFromStream(am.open(values[0] + ".jpg"),null), am.openFd(values[0] + ".mp3")));
+                image = Drawable.createFromStream(am.open(values[0].replaceAll(" ", "") + ".jpg"), null);
+                sound = am.openFd(values[0] + ".mp3");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            db.put(values[0], new Poi(values[0], values[1], Double.parseDouble(values[2].split(",")[0]), Double.parseDouble(values[2].split(",")[1]), values[3], ans, image, sound));
         }
         myReader.close();
     }
