@@ -35,11 +35,12 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        LOGGER = new Logger();
+
         String arg = getIntent().getStringExtra("poi");
         if(arg!=null){
-            PoiDb poiDb= PoiDb.getInstance();
-
-            poi = poiDb.getPoi(arg);
+            LOGGER.e("Found %s in passed args to quizActivity", arg);
+            poi = PoiDb.getDb().get(arg);
 
             this.question = poi.question;
             this.ans = poi.ans;
@@ -51,8 +52,6 @@ public class QuizActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
-        LOGGER = new Logger();
 
 
         playButton = findViewById(R.id.playButton);

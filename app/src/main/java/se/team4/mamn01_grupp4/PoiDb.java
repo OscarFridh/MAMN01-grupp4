@@ -12,26 +12,14 @@ import java.util.Scanner;
 
 public class PoiDb{
 
-    private Map<String, Poi> db = new HashMap<>();
-    private static PoiDb instance = null;
+    private static Map<String, Poi> db = new HashMap<>();
 
-    public PoiDb(){
-
+    public PoiDb(AssetManager am){
+        createDb(am);
     }
 
-    public static PoiDb getInstance(){
-        if(instance == null){
-            instance = new PoiDb();
-        }
-        return instance;
-    }
-
-    public Poi getPoi(String key){
-        return db.get(key);
-    }
-
-    public Poi[] getValues(){
-        return (Poi[]) db.values().toArray();
+    public static Map<String, Poi> getDb(){
+        return db;
     }
 
     public void createDb(AssetManager am){

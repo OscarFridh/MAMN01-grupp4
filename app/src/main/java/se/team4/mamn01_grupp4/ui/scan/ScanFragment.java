@@ -42,7 +42,7 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
   private static final float TEXT_SIZE_DIP = 10;
   private Bitmap rgbFrameBitmap = null;
   private long lastProcessingTimeMs;
-  private int popupWindowValue = 35;
+  private int popupWindowValue = 30;
   private Integer sensorOrientation;
   private Classifier classifier;
   private BorderedText borderedText;
@@ -109,7 +109,7 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
                         showResultsInBottomSheet(results);
                       }
                     });
-            if(results.get(0).getConfidence() * 100 > popupWindowValue){
+            if(results.get(0).getConfidence() * 100 > popupWindowValue && results.get(0).getTitle().equals("Domkyrkan")){
               showPopup(results.get(0));
             }
           }

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#0099cc"
     tools:context=".ui.quiz.QuizActivity">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:layout_gravity="center">
 
 <ImageView
     android:id="@+id/playButton"
@@ -37,6 +41,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Time: "
+    android:layout_marginTop="50dp"
     android:textSize="24sp"
     app:layout_constraintTop_toBottomOf="@id/question"
     app:layout_constraintRight_toRightOf="parent"
@@ -50,7 +55,17 @@
     app:layout_constraintTop_toTopOf="@id/TimeText"
     app:layout_constraintBottom_toBottomOf="@id/TimeText"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toTopOf="@id/rightArrow"
+        app:layout_constraintRight_toRightOf="@id/rightArrow"
+        app:layout_constraintLeft_toLeftOf="@id/rightArrow"/>
+
 <ImageView
+    android:id="@+id/rightArrow"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/ic_arrows"
@@ -68,10 +83,20 @@
     android:src="@drawable/ic_vibration_black_24dp"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/question"
+    app:layout_constraintTop_toBottomOf="@id/TimeText"
     android:layout_marginHorizontal="20dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yes"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toTopOf="@id/leftArrow"
+        app:layout_constraintRight_toRightOf="@id/leftArrow"
+        app:layout_constraintLeft_toLeftOf="@id/leftArrow"/>
+
 <ImageView
+    android:id="@+id/leftArrow"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/ic_arrows"
@@ -83,3 +108,5 @@
     app:layout_constraintBottom_toBottomOf="@id/phoneIcon"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

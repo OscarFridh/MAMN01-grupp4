@@ -92,7 +92,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        for(Poi marker : poiDb.getValues()){
+        for(Poi marker : PoiDb.getDb().values()){
             mMap.addMarker(new MarkerOptions().position(marker.location).title(marker.name));
         }
 
@@ -115,7 +115,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 String markerTitle = marker.getTitle();
                 sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 scrollHeader.setText(markerTitle);
-                scrollDesc.setText(Objects.requireNonNull(poiDb.getPoi(markerTitle)).description);
+                scrollDesc.setText(Objects.requireNonNull(PoiDb.getDb().get(markerTitle)).description);
                 return true;
             }
         });

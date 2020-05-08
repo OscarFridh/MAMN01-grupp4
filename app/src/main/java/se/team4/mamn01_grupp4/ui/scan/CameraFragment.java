@@ -521,13 +521,12 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
 
   protected void showPopup(Recognition result){
       try {
-        LOGGER.e("Domkyrkan found");
+        LOGGER.e("%s found", result.getTitle());
         Intent intent = new Intent(getActivity(), QuizActivity.class);
         Bundle b = new Bundle();
         b.putString("poi", result.getTitle());
         intent.putExtras(b);
         startActivity(intent);
-        getActivity().finish();
       } catch(Exception e){
         e.printStackTrace();
         LOGGER.e("Error finding %s in database", result.getTitle());
