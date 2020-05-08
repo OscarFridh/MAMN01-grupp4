@@ -25,9 +25,8 @@ public class QuizActivity extends AppCompatActivity {
     private ImageView playButton;
     private TextView timeValue;
     private Poi poi;
-    String question;
-    boolean ans;
-    private View popupView;
+    TextView questionView;
+    TextView locationView;
     Logger LOGGER;
 
     @Override
@@ -42,8 +41,6 @@ public class QuizActivity extends AppCompatActivity {
             LOGGER.e("Found %s in passed args to quizActivity", arg);
             poi = PoiDb.getDb().get(arg);
 
-            this.question = poi.question;
-            this.ans = poi.ans;
 
             player = new MediaPlayer();
             try {
@@ -56,6 +53,12 @@ public class QuizActivity extends AppCompatActivity {
 
         playButton = findViewById(R.id.playButton);
         timeValue = findViewById(R.id.TimeValue);
+        locationView = findViewById(R.id.locationName);
+        questionView = findViewById(R.id.question);
+
+        locationView.setText(poi.name);
+        questionView.setText(poi.question);
+
 
         playButton.setOnClickListener(new Button.OnClickListener() {
             @Override

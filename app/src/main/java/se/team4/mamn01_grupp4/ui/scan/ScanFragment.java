@@ -31,7 +31,6 @@ import se.team4.mamn01_grupp4.env.BorderedText;
 import se.team4.mamn01_grupp4.env.Logger;
 import se.team4.mamn01_grupp4.tflite.Classifier;
 import se.team4.mamn01_grupp4.tflite.Classifier.Device;
-import se.team4.mamn01_grupp4.ui.quiz.QuizWindow;
 
 import java.io.IOException;
 import java.util.List;
