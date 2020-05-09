@@ -47,6 +47,7 @@ public class QuizActivity extends AppCompatActivity {
             player = new MediaPlayer();
             try {
                 player.setDataSource(poi.sound.getFileDescriptor(), poi.sound.getStartOffset(), poi.sound.getLength());
+                player.prepare();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -67,7 +68,7 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(player != null){
                     if(player.isPlaying()){
-                        player.stop();
+                        player.pause();
                         playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
                     } else{
                         player.start();

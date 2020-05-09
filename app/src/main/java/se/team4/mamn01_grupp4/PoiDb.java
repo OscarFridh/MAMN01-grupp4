@@ -44,10 +44,16 @@ public class PoiDb{
             AssetFileDescriptor sound = null;
             try {
                 image = Drawable.createFromStream(am.open(values[0].replaceAll(" ", "") + ".jpg"), null);
-                sound = am.openFd(values[0] + ".mp3");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            try {
+                sound = am.openFd(values[0].replaceAll(" ", "") + ".mp3");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             db.put(values[0], new Poi(values[0], values[1], Double.parseDouble(values[2].split(",")[0]), Double.parseDouble(values[2].split(",")[1]), values[3], ans, image, sound));
         }
         myReader.close();
