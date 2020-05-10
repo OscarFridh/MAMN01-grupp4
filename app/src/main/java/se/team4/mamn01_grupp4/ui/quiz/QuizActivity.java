@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.graphics.drawable.ClipDrawable;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -29,13 +32,15 @@ public class QuizActivity extends AppCompatActivity {
     private TextView bonusText;
     private TextView bonusValue;
     private TextView timeValue;
+    private ImageView greyWave;
+    private ClipDrawable blueWaveClip;
+    Handler myHandler;
     private Poi poi;
     private int bonusScore;
     FrameLayout container;
     TextView questionView;
     TextView locationView;
     Logger LOGGER;
-    private int score = 1;
 
     CountDownTimer scoreCounter = new CountDownTimer(20000, 2000) {
 
@@ -72,15 +77,19 @@ public class QuizActivity extends AppCompatActivity {
             }
         }
 
+        myHandler = new Handler();
 
         container = findViewById(R.id.quiz_window);
         playButton = findViewById(R.id.playButton);
         bonusText = findViewById(R.id.BonusText);
         bonusValue = findViewById(R.id.BonusValue);
-        timeValue = findViewById(R.id.TimeValue);
         locationView = findViewById(R.id.locationName);
         questionView = findViewById(R.id.question);
+        greyWave = findViewById(R.id.grey_wave);
+        ImageView blueWave = findViewById(R.id.blue_wave);
+        blueWaveClip = (ClipDrawable) blueWave.getDrawable();
 
+        blueWaveClip.setLevel(0);
         locationView.setText(poi.name);
         questionView.setText(poi.question);
 
@@ -90,30 +99,28 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(player != null){
                     player.start();
-                    playButton.setImageResource(R.drawable.ic_pause_circle_filled_black_24dp);
                     scoreCounter.start();
-                    new CountDownTimer(60000, 1000) {
+                    new CountDownTimer(60000, 100) {
 
                         public void onTick(long millisUntilFinished) {
-                            timeValue.setText(String.valueOf(millisUntilFinished / 1000));
+                            blueWaveClip.setLevel((int)((60000 - millisUntilFinished)/6));
                         }
 
                         public void onFinish() {
-                            questionView.setText("You got 0 points!");
-                            container.setBackgroundResource(R.drawable.gradient_red_background);
-                            player.stop();
+                            blueWaveClip.setLevel(0);
+                            evaluateResult(!poi.ans, 0);
                         }
 
                     }.start();
                 } else{
                     LOGGER.e("Sound file not found");
                 }
+                playButton.setVisibility(View.INVISIBLE);
+                greyWave.setVisibility(View.VISIBLE);
+
+                playButton.setOnClickListener(null);
             }
         });
-
-        Intent intent = getIntent();
-        intent.putExtra("result", score);
-        setResult(RESULT_OK, intent);
 
     }
 
@@ -126,6 +133,19 @@ public class QuizActivity extends AppCompatActivity {
             container.setBackgroundResource(R.drawable.gradient_red_background);
         }
         player.stop();
+
+        Intent intent = getIntent();
+        intent.putExtra("result", score + bonusScore);
+        setResult(RESULT_OK, intent);
+
+
+        myHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 3000);
     }
 
     @Override
