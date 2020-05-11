@@ -93,7 +93,6 @@ public class QuizActivity extends AppCompatActivity {
         locationView.setText(poi.name);
         questionView.setText(poi.question);
 
-
         playButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {

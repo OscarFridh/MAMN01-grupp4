@@ -143,4 +143,10 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
     }
 
   }
+
+  @Override
+  public synchronized void onResume() {
+    super.onResume();
+  }
+
 }

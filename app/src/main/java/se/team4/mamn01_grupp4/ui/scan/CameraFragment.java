@@ -101,8 +101,6 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
         AdapterView.OnItemSelectedListener {
   private static final Logger LOGGER = new Logger();
   private static final int PERMISSIONS_REQUEST = 1;
-
-  private int popupWindowValue = 35;
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
   protected Handler handler;
   private View root;
@@ -117,12 +115,8 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   private int yRowStride;
   private Runnable postInferenceCallback;
   private Runnable imageConverter;
-  private LinearLayout bottomSheetLayout;
-  private LinearLayout gestureLayout;
-  private BottomSheetBehavior<LinearLayout> sheetBehavior;
   protected TextView recognitionTextView,
       recognitionValueTextView;
-  protected ImageView bottomSheetArrowImageView;
 
   private Device device = Device.CPU;
   private int numThreads = -1;
@@ -140,58 +134,6 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     } else {
       requestPermission();
     }
-
-    bottomSheetLayout = root.findViewById(R.id.bottom_sheet_layout);
-    gestureLayout = root.findViewById(R.id.gesture_layout);
-    sheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
-    bottomSheetArrowImageView = root.findViewById(R.id.bottom_sheet_arrow);
-
-    ViewTreeObserver vto = gestureLayout.getViewTreeObserver();
-    vto.addOnGlobalLayoutListener(
-        new ViewTreeObserver.OnGlobalLayoutListener() {
-          @Override
-          public void onGlobalLayout() {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-              gestureLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-            } else {
-              gestureLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-            //                int width = bottomSheetLayout.getMeasuredWidth();
-            int height = gestureLayout.getMeasuredHeight();
-
-            sheetBehavior.setPeekHeight(height);
-          }
-        });
-    sheetBehavior.setHideable(false);
-
-    sheetBehavior.setBottomSheetCallback(
-        new BottomSheetBehavior.BottomSheetCallback() {
-          @Override
-          public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            switch (newState) {
-              case BottomSheetBehavior.STATE_HIDDEN:
-                break;
-              case BottomSheetBehavior.STATE_EXPANDED:
-                {
-                  bottomSheetArrowImageView.setImageResource(R.drawable.icn_chevron_down);
-                }
-                break;
-              case BottomSheetBehavior.STATE_COLLAPSED:
-                {
-                  bottomSheetArrowImageView.setImageResource(R.drawable.icn_chevron_up);
-                }
-                break;
-              case BottomSheetBehavior.STATE_DRAGGING:
-                break;
-              case BottomSheetBehavior.STATE_SETTLING:
-                bottomSheetArrowImageView.setImageResource(R.drawable.icn_chevron_up);
-                break;
-            }
-          }
-
-          @Override
-          public void onSlide(@NonNull View bottomSheet, float slideOffset) {}
-        });
 
     recognitionTextView = root.findViewById(R.id.detected_item);
     recognitionValueTextView = root.findViewById(R.id.detected_item_value);
@@ -323,6 +265,9 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     LOGGER.d("onResume " + this);
     super.onResume();
 
+    if(postInferenceCallback != null){
+      postInferenceCallback.run();
+    }
     handlerThread = new HandlerThread("inference");
     handlerThread.start();
     handler = new Handler(handlerThread.getLooper());
