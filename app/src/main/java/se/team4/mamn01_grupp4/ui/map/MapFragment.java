@@ -94,7 +94,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         for(Poi marker : PoiDb.getDb().values()){
-            mMap.addMarker(new MarkerOptions().position(marker.location).title(marker.name));
+            if(marker.isAnswered){
+                mMap.addMarker(new MarkerOptions().position(marker.location).title(marker.name).alpha((float) 0.5));
+            }else {
+                mMap.addMarker(new MarkerOptions().position(marker.location).title(marker.name));
+            }
         }
 
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.70584, 13.19321) , 10) );
