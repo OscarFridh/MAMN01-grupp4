@@ -80,11 +80,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.Inflater;
 
 import se.team4.mamn01_grupp4.MainActivity;
+import se.team4.mamn01_grupp4.Poi;
 import se.team4.mamn01_grupp4.PoiDb;
 import se.team4.mamn01_grupp4.R;
 import se.team4.mamn01_grupp4.customview.AutoFitTextureView;
@@ -105,6 +107,8 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   protected Handler handler;
   private View root;
   Fragment fragment;
+  private Map<String, Poi> poiDb;
+  private boolean showingDialog = false;
   private HandlerThread handlerThread;
   protected int previewWidth = 0;
   protected int previewHeight = 0;
@@ -135,6 +139,7 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
       requestPermission();
     }
 
+    poiDb = PoiDb.getDb();
     recognitionTextView = root.findViewById(R.id.detected_item);
     recognitionValueTextView = root.findViewById(R.id.detected_item_value);
     return root;
@@ -207,7 +212,7 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
         return;
       }
 
-      if (isProcessingFrame) {
+      if (isProcessingFrame || showingDialog) {
         image.close();
         return;
       }
@@ -462,17 +467,39 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   }
 
   protected void showPopup(Recognition result){
+    if(poiDb.get(result.getTitle()).isAnswered ){
+      showingDialog = true;
+      AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+      alertDialog.setTitle("Alert");
+      alertDialog.setMessage("This question has already been answered");
+      alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+              new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                  showingDialog = false;
+                  dialog.dismiss();
+                }
+              });
+      alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        @Override
+        public void onCancel(DialogInterface dialog) {
+          showingDialog = false;
+        }
+      });
+      alertDialog.show();
+    }else {
       try {
+        poiDb.get(result.getTitle()).isAnswered = true;
         LOGGER.e("%s found", result.getTitle());
         Intent intent = new Intent(getActivity(), QuizActivity.class);
         Bundle b = new Bundle();
         b.putString("poi", result.getTitle());
         intent.putExtras(b);
         startActivityForResult(intent, 1);
-      } catch(Exception e){
+      } catch (Exception e) {
         e.printStackTrace();
         LOGGER.e("Error finding %s in database", result.getTitle());
       }
+    }
   }
 
   protected Device getDevice() {

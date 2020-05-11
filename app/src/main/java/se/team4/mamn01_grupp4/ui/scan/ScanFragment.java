@@ -16,6 +16,8 @@
 
 package se.team4.mamn01_grupp4.ui.scan;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Typeface;
@@ -26,6 +28,8 @@ import android.util.TypedValue;
 import android.view.TextureView;
 
 import se.team4.mamn01_grupp4.MainActivity;
+import se.team4.mamn01_grupp4.Poi;
+import se.team4.mamn01_grupp4.PoiDb;
 import se.team4.mamn01_grupp4.R;
 import se.team4.mamn01_grupp4.env.BorderedText;
 import se.team4.mamn01_grupp4.env.Logger;
@@ -34,6 +38,7 @@ import se.team4.mamn01_grupp4.tflite.Classifier.Device;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class ScanFragment extends CameraFragment implements OnImageAvailableListener {
   private static final Logger LOGGER = new Logger();
@@ -98,8 +103,13 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
             final List<Classifier.Recognition> results =
                     classifier.recognizeImage(rgbFrameBitmap, sensorOrientation);
 
+
             lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
             LOGGER.v("Detect: %s", results);
+
+            if(results.get(0).getConfidence() * 100 > popupWindowValue ){
+              showPopup(results.get(0));
+            }
 
             getActivity().runOnUiThread(
                     new Runnable() {
@@ -108,9 +118,7 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
                         showResultsInBottomSheet(results);
                       }
                     });
-            if(results.get(0).getConfidence() * 100 > popupWindowValue){
-              showPopup(results.get(0));
-            }
+
           }
           readyForNextImage();
         }

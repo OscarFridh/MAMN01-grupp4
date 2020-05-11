@@ -13,6 +13,7 @@ public class Poi{
     public AssetFileDescriptor sound;
     public String question;
     public boolean ans;
+    public boolean isAnswered;
     public String description;
 
     public Poi(String name, String description, double v, double v1, String question, boolean ans, Drawable image, AssetFileDescriptor sound){
@@ -23,5 +24,6 @@ public class Poi{
         this.sound = sound;
         this.question = question;
         this.ans = ans;
+        this.isAnswered = false;
     }
 }
