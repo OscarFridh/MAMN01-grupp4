@@ -29,11 +29,20 @@
             android:id="@+id/scroll_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Test"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bottom_sheet_arrow2" />
+
+        <TextView
+            android:id="@+id/question_answered"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/scroll_header"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/reference_image"/>
 
         <ImageView
             android:id="@+id/reference_image"
@@ -45,12 +54,13 @@
 
         <TextView
             android:id="@+id/scroll_text"
+            android:layout_marginTop="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/lorem"
-            app:layout_constraintTop_toBottomOf="@id/scroll_header"
+            app:layout_constraintTop_toBottomOf="@id/question_answered"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/reference_image"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -53,6 +53,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private BottomSheetBehavior sheetBehavior;
     private TextView scrollHeader;
     private TextView scrollDesc;
+    private TextView answeredText;
     private ImageView imageView;
     private GoogleMap mMap;
     private LocationManager locationManager;
@@ -74,6 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         imageView = root.findViewById(R.id.reference_image);
         scrollHeader = root.findViewById(R.id.scroll_header);
         scrollDesc = root.findViewById(R.id.scroll_text);
+        answeredText = root.findViewById(R.id.question_answered);
 
         return root;
     }
@@ -112,10 +114,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             @Override
             public boolean onMarkerClick(Marker marker) {
                 String markerTitle = marker.getTitle();
+                Poi poi = PoiDb.getDb().get(markerTitle);
                 sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 scrollHeader.setText(markerTitle);
-                scrollDesc.setText(Objects.requireNonNull(PoiDb.getDb().get(markerTitle)).description);
-                imageView.setImageDrawable((Objects.requireNonNull(PoiDb.getDb().get(markerTitle)).image));
+                scrollDesc.setText(poi.description);
+                imageView.setImageDrawable((poi.image));
+                if(poi.isAnswered){
+                    answeredText.setText("This question is answered");
+                } else {
+                    answeredText.setText("This question is not answered");
+                }
                 return true;
             }
         });
