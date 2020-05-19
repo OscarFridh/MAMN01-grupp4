@@ -24,16 +24,22 @@
         <item>NNAPI</item>
     </string-array>
 
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed risus ac neque feugiat placerat ut eu elit. Nam pulvinar congue porttitor. Cras a ipsum dolor. Suspendisse potenti. Cras congue pellentesque enim, in ultrices dui rhoncus eu. Aenean congue massa lacinia scelerisque dapibus. Pellentesque eget consectetur nibh. Nunc erat velit, commodo non lacinia non, sagittis et est. Aenean dolor odio, molestie et lorem sed, aliquet accumsan quam. Maecenas vestibulum non ipsum a ornare. Nunc pretium metus eget ex aliquet sodales. Donec blandit tellus ac felis tristique, ut dignissim metus sagittis. Donec condimentum tempor mattis. Mauris sollicitudin, lorem eget bibendum ullamcorper, ante nisi imperdiet arcu, lobortis lobortis felis urna sit amet eros. Mauris suscipit risus a velit efficitur accumsan. Nulla imperdiet nibh sed velit faucibus, ut venenatis diam maximus.
+    <string name="text_shake">Shake to grade your Quiz!</string>
+    <string name="text_home_header">How to play the game:</string>
+    <string name="text_instructions">The navigation bar on the bottom can be used to easily access the different main parts of the application.\n\n
 
-Proin consectetur mauris risus. Ut id pretium nisl. Vestibulum ac augue ut elit maximus porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec porta aliquet est eget porta. Sed et gravida dolor. Quisque imperdiet, ligula a accumsan gravida, lorem augue aliquet nulla, sit amet pellentesque augue lacus a urna.
+    To get started, head over to the map to see the different locations available for scanning in your area.\n\n
 
-Vestibulum feugiat orci nec est faucibus vestibulum. Vivamus vel ante ut nulla sodales sagittis eu et est. Nam id turpis consectetur, varius magna ut, iaculis diam. In finibus mauris eget lobortis tristique. Morbi vehicula tempor ligula, sit amet porttitor ipsum ornare non. Praesent libero lorem, tincidunt ac lobortis luctus, laoreet at sapien. Vestibulum et est orci. Nam nec mi sagittis, eleifend urna vel, porta lectus. Sed molestie, nisi vitae rutrum pulvinar, ex enim faucibus enim, in viverra massa mauris sed dolor. Vivamus elementum vulputate ipsum, vitae bibendum diam viverra id. Integer id ipsum nisi.
+    When you have reached a location, navigate to the scan-window to scan the object with your camera.\n\n
 
-Nunc mattis nibh in placerat euismod. Quisque consectetur et quam in volutpat. Nulla suscipit pharetra facilisis. Curabitur porta metus et consequat fermentum. Mauris vel odio et lorem accumsan mattis. Duis tellus nisl, porttitor elementum venenatis at, tempor in elit. In ullamcorper urna non elit cursus auctor. Vivamus luctus, nunc vel dapibus euismod, quam ex euismod enim, eu ultrices augue dui sit amet tortor. Nullam nec lectus eu erat volutpat tempus. Duis a lorem risus. Suspendisse quis aliquam justo. In quis lacinia est. Nulla facilisi. Suspendisse nec erat eu felis accumsan facilisis.
+    Once a question have been opened, make sure you have media-sound turned on in your phone and press play to start the question. Answer the question by shaking the phone in either direction.\n\n
 
-Nulla efficitur porta enim ut porta. Vivamus fringilla, nunc nec dignissim pharetra, nisl ex ultrices mi, sit amet porta tellus odio vel dolor. Vivamus eu justo est. Suspendisse potenti. Praesent sollicitudin non nunc id bibendum. Proin sodales massa quis quam volutpat, vel vehicula nulla fermentum. Maecenas in euismod nunc. Praesent sollicitudin, quam nec tincidunt aliquam, nunc mi semper purus, a faucibus libero lorem sit amet urna. Proin ut lacinia ex.</string>
-    <string name="text_start">"Shake to find objects! "</string>
+    When you have answered as many questions you like, head back to this page for instructions on how to grade the quiz.</string>
+
+    <string name="text_score">You scored:</string>
+    <string name="slash">/</string>
+    <string name="text_bonus_score">Bonus score</string>
+    <string name="text_total_score">Your total score is:</string>
 
     <string name="title_activity_quiz">QuizActivity</string>
     <string name="dummy_button">Dummy Button</string>

@@ -54,6 +54,7 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         public void onFinish() {
+            bonusScore = 0;
             bonusText.setText("");
             bonusValue.setText("");
         }
@@ -184,6 +185,11 @@ public class QuizActivity extends AppCompatActivity {
     protected void onStop(){
         super.onStop();
         player.stop();
+    }
+
+    @Override
+    public void onBackPressed () {
+
     }
 
 }

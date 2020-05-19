@@ -1,6 +1,12 @@
 package se.team4.mamn01_grupp4.ui.home;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,13 +17,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import java.util.Objects;
+
+import se.team4.mamn01_grupp4.MainActivity;
 import se.team4.mamn01_grupp4.R;
+import se.team4.mamn01_grupp4.env.Logger;
 import se.team4.mamn01_grupp4.ui.map.MapFragment;
+import se.team4.mamn01_grupp4.ui.quiz.QuizActivity;
 
 
 public class HomeFragment extends Fragment {
@@ -26,18 +38,31 @@ public class HomeFragment extends Fragment {
     private float acelVal; //Current acceleration value and gravity
     private float acelLast; //Last acc value and gravity
     private float shake; // acc value differ from gravity
+    private TextView homeHeader;
+    private TextView instructions;
+    private TextView shakeText;
+    private Logger LOGGER;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
+        LOGGER = new Logger();
 
-        sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        sm.registerListener(sensorListner, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        homeHeader = root.findViewById(R.id.home_header);
+        instructions = root.findViewById(R.id.instruction_text);
+        shakeText = root.findViewById(R.id.shake_text);
 
-        acelVal = SensorManager.GRAVITY_EARTH;
-        acelLast = SensorManager.GRAVITY_EARTH;
-        shake = 0.00f;
+        if(((MainActivity)getActivity()).getAnsweredQuestions() > 0){
+            instructions.setVisibility(View.INVISIBLE);
+            homeHeader.setVisibility(View.INVISIBLE);
+            shakeText.setVisibility(View.VISIBLE);
+            sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+            sm.registerListener(sensorListner, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+            acelVal = SensorManager.GRAVITY_EARTH;
+            acelLast = SensorManager.GRAVITY_EARTH;
+            shake = 0.00f;
+        }
 
         return root;
 
@@ -50,8 +75,6 @@ public class HomeFragment extends Fragment {
         float y = event.values[1];
         float z = event.values[2];
 
-        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
         acelLast = acelVal;
         acelVal = (float) Math.sqrt((double)  x*x + y*y + z*z );
         float delta = acelVal - acelLast;
@@ -60,7 +83,37 @@ public class HomeFragment extends Fragment {
 
 
             if(shake > 12){
-                navController.navigate(R.id.navigation_map);
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                alertDialog.setTitle("Warning");
+                alertDialog.setMessage("Are you sure you want to grade the quiz? \nThis will force you to restart afterwards.");
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continue",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getActivity(), ResultActivity.class);
+                                Bundle b = new Bundle();
+                                b.putInt("score", ((MainActivity)getActivity()).getScore());
+                                b.putInt("bonus", ((MainActivity)getActivity()).getBonusScore());
+                                b.putInt("answered", ((MainActivity)getActivity()).getAnsweredQuestions());
+                                intent.putExtras(b);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        });
+                alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        sm.registerListener(sensorListner, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+                    }
+                });
+                alertDialog.show();
+                sm.unregisterListener(this);
+
             }
 
         }
@@ -74,19 +127,25 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
-        sm.unregisterListener(sensorListner);
+        if(sm != null) {
+            sm.unregisterListener(sensorListner);
+        }
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        sm.unregisterListener(sensorListner);
+        if(sm != null) {
+            sm.unregisterListener(sensorListner);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        sm.registerListener(sensorListner, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        if(sm != null) {
+            sm.registerListener(sensorListner, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
 }

@@ -20,6 +20,7 @@ import se.team4.mamn01_grupp4.env.Logger;
 public class MainActivity extends AppCompatActivity {
 
     private int score = 0;
+    private int bonusScore = 0;
     private int answeredQuestions = 0;
     private Logger LOGGER;
 
@@ -49,14 +50,30 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode  == RESULT_OK) {
 
                 int result = data.getIntExtra("result", 0);
-                score += result;
+                if(result > 0){
+                    LOGGER.e("Result is: %s", result);
+                    score += 5;
+                    bonusScore += result-5;
+                }
                 answeredQuestions ++;
-                LOGGER.e("Current score is : %s", score);
+                LOGGER.i("Current score is : %s", score);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
+    }
+
+    public int getScore(){
+        return score;
+    }
+
+    public int getBonusScore(){
+        return bonusScore;
+    }
+
+    public int getAnsweredQuestions(){
+        return answeredQuestions;
     }
 
 
