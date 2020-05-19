@@ -23,6 +23,7 @@ public class PoiDb{
     }
 
     public void createDb(AssetManager am){
+        db = new HashMap<>();
         Scanner myReader = null;
         try {
             myReader = new Scanner(am.open("database"));

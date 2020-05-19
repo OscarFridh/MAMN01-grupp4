@@ -27,6 +27,8 @@ import android.graphics.drawable.Drawable;
 import android.media.ImageReader.OnImageAvailableListener;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.TextureView;
@@ -70,6 +72,9 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
     public void onTick(long millisUntilFinished) {
       if (lastConfidence > popupWindowValue && countDownName == lastResultName) {
         countdownText.setText(String.format("%.1f", ((float)millisUntilFinished / 1000)));
+        if(Math.floor(millisUntilFinished/100)%10 == 0){
+          vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
       } else {
         countdownText.setText("");
         bottomView.setBackgroundResource(R.color.colorPrimary);

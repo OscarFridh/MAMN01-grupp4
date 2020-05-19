@@ -50,6 +50,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Trace;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Size;
@@ -123,6 +124,7 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
       recognitionValueTextView;
   protected TextView countdownText;
   protected View bottomView;
+  protected Vibrator vibrator;
   private Device device = Device.CPU;
   private int numThreads = -1;
 
@@ -145,6 +147,8 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     countdownText = root.findViewById(R.id.countdown_text);
     recognitionTextView = root.findViewById(R.id.detected_item);
     recognitionValueTextView = root.findViewById(R.id.detected_item_value);
+
+    vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
     return root;
   }
 

@@ -1,16 +1,22 @@
 package se.team4.mamn01_grupp4.ui.quiz;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ClipDrawable;
 import android.media.Image;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -35,6 +41,7 @@ public class QuizActivity extends AppCompatActivity {
     private ImageView playButton;
     private TextView bonusText;
     private TextView bonusValue;
+    private Vibrator vibrator;
     private Animation shake;
     private ImageView phoneIcon;
     private ImageView greyWave;
@@ -69,6 +76,9 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         LOGGER = new Logger();
+
+
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         String arg = getIntent().getStringExtra("poi");
         if(arg!=null){
@@ -154,19 +164,29 @@ public class QuizActivity extends AppCompatActivity {
 
     private void evaluateResult(boolean ans, int score){
         phoneIcon.clearAnimation();
+        player.stop();
         if(poi.ans == ans){
+            player = MediaPlayer.create(this, R.raw.win);
+            vibrator.vibrate(VibrationEffect.createWaveform(new long[]{0,100,100,100}, -1));
             container.setBackgroundResource(R.drawable.gradient_green_background);
             questionView.setText("You got " + (score+5) + "points!");
         } else {
+            player = MediaPlayer.create(this, R.raw.loose);
+            vibrator.vibrate(VibrationEffect.createWaveform(new long[]{0,400,200,400}, -1));
             questionView.setText("You got 0 points!");
             container.setBackgroundResource(R.drawable.gradient_red_background);
         }
-        player.stop();
 
         Intent intent = getIntent();
         intent.putExtra("result", score + bonusScore);
         setResult(RESULT_OK, intent);
 
+        myHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                player.start();
+            }
+        }, 1000);
 
         myHandler.postDelayed(new Runnable() {
 
