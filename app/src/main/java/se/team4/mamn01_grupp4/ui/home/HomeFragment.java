@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment {
             if(shake > 12){
                 AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                 alertDialog.setTitle("Warning");
-                alertDialog.setMessage("Are you sure you want to grade the quiz? \nThis will force you to restart afterwards.");
+                alertDialog.setMessage("Are you sure you want to grade the quiz? \nYou will have to start from the beginning afterwards.");
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

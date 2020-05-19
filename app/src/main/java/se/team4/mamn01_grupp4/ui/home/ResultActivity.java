@@ -2,6 +2,8 @@ package se.team4.mamn01_grupp4.ui.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +43,10 @@ public class ResultActivity extends AppCompatActivity {
         maxScore = getIntent().getIntExtra("answered", 0) * 5;
         bonusScore = getIntent().getIntExtra("bonus", 0);
 
+        if(score == maxScore){
+            findViewById(R.id.result_layout).setBackgroundResource(R.drawable.gradient_green_background);
+        }
+
         scoreText.setText(String.valueOf(score));
         bonusText.setText(String.valueOf(bonusScore));
         maxScoreText.setText(String.valueOf(maxScore));
@@ -61,5 +67,26 @@ public class ResultActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Warning");
+        alertDialog.setMessage("Are you sure you want to exit the application?");
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ResultActivity.super.onBackPressed();
+                    }
+                });
+        alertDialog.show();
     }
 }

@@ -6,8 +6,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -16,6 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import se.team4.mamn01_grupp4.env.Logger;
+import se.team4.mamn01_grupp4.ui.home.ResultActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,6 +79,34 @@ public class MainActivity extends AppCompatActivity {
 
     public int getAnsweredQuestions(){
         return answeredQuestions;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Warning");
+            alertDialog.setMessage("Are you sure you want to exit the application?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.super.onBackPressed();
+                        }
+                    });
+            alertDialog.show();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
     }
 
 
