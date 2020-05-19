@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PoiDb poiDb = new PoiDb(getAssets());
         LOGGER = new Logger();
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -48,8 +47,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        PoiDb poiDb = new PoiDb(getAssets());
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        LOGGER.e("Result aquired");
         try {
             super.onActivityResult(requestCode, resultCode, data);
 

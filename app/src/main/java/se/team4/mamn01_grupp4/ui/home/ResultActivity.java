@@ -3,9 +3,12 @@ package se.team4.mamn01_grupp4.ui.home;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,7 +24,7 @@ public class ResultActivity extends AppCompatActivity {
     private TextView totalScoreText;
     private Button restartButton;
     private Button exitButton;
-
+    private Vibrator vibrator;
     private int score;
     private int bonusScore;
     private int maxScore;
@@ -37,6 +40,8 @@ public class ResultActivity extends AppCompatActivity {
         totalScoreText = findViewById(R.id.total_score_value);
         restartButton = findViewById(R.id.button_restart);
         exitButton = findViewById(R.id.button_exit);
+
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 
         score = getIntent().getIntExtra("score", 0);
@@ -55,6 +60,7 @@ public class ResultActivity extends AppCompatActivity {
         restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
                 Intent intent = new Intent(ResultActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -64,6 +70,8 @@ public class ResultActivity extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
                 finish();
             }
         });
