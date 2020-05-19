@@ -26,9 +26,7 @@
 
     <string name="text_shake">Shake to grade your Quiz!</string>
     <string name="text_home_header">How to play the game:</string>
-    <string name="text_instructions">The navigation bar on the bottom can be used to easily access the different main parts of the application.\n\n
-
-    To get started, head over to the map to see the different locations available for scanning in your area.\n\n
+    <string name="text_instructions">To get started, head over to the map to see the different locations available for scanning in your area.\n\n
 
     When you have reached a location, navigate to the scan-window to scan the object with your camera.\n\n
 

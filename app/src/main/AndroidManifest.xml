@@ -23,7 +23,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.home.ResultActivity"></activity>
+        <activity
+            android:name=".ui.home.ResultActivity"
+            android:label="Results"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.quiz.QuizActivity"
             android:label="Quiz it is!"
