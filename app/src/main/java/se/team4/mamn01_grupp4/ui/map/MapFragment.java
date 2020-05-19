@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,15 +104,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.70584, 13.19321) , 10) );
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 255);
+        if(hasPermission()){
+            activateLocation();
+        } else{
+            requestPermission();
         }
-
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -149,6 +146,41 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myLatLng, 13);
         mMap.animateCamera(cameraUpdate);
         locationManager.removeUpdates(this);
+    }
+
+    private void activateLocation(){
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+    }
+
+    private boolean hasPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return true;
+        }
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            final int requestCode, final String[] permissions, final int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (hasPermission()) {
+                activateLocation();
+            } else {
+                requestPermission();
+            }
+        }
     }
 
     @Override
