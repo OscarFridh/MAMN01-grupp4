@@ -16,16 +16,21 @@
 
 package se.team4.mamn01_grupp4.ui.scan;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.TextureView;
+import android.widget.TextView;
 
 import se.team4.mamn01_grupp4.MainActivity;
 import se.team4.mamn01_grupp4.Poi;
@@ -46,6 +51,8 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
   private static final float TEXT_SIZE_DIP = 10;
   private Bitmap rgbFrameBitmap = null;
   private long lastProcessingTimeMs;
+  private float lastConfidence = 0;
+  private String lastResultName;
   private int popupWindowValue = 97;
   private Integer sensorOrientation;
   private Classifier classifier;
@@ -55,7 +62,32 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
   /** Input image size of the model along y axis. */
   private int imageSizeY;
 
-  @Override
+  private String countDownName;
+  private boolean timerRunning = false;
+  CountDownTimer confidenceTimer = new CountDownTimer(3000, 100) {
+
+    @SuppressLint("DefaultLocale")
+    public void onTick(long millisUntilFinished) {
+      if (lastConfidence > popupWindowValue && countDownName == lastResultName) {
+        countdownText.setText(String.format("%.1f", ((float)millisUntilFinished / 1000)));
+      } else {
+        countdownText.setText("");
+        bottomView.setBackgroundResource(R.color.colorPrimary);
+        timerRunning = false;
+        this.cancel();
+      }
+    }
+
+    public void onFinish() {
+      timerRunning = false;
+      countdownText.setText("");
+      bottomView.setBackgroundResource(R.color.colorPrimary);
+      showPopup(countDownName);
+    }
+  };
+
+
+    @Override
   protected int getLayoutId() {
     return R.layout.tfe_ic_camera_connection_fragment;
   }
@@ -105,10 +137,15 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
 
 
             lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
+            lastConfidence = results.get(0).getConfidence() * 100;
+            lastResultName = results.get(0).getTitle();
             LOGGER.v("Detect: %s", results);
 
-            if(results.get(0).getConfidence() * 100 > popupWindowValue ){
-              showPopup(results.get(0));
+            if(lastConfidence > popupWindowValue && !timerRunning){
+              countDownName = lastResultName;
+              bottomView.setBackgroundResource(R.color.colorGreen);
+              timerRunning = true;
+              confidenceTimer.start();
             }
 
             getActivity().runOnUiThread(
@@ -153,8 +190,12 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
   }
 
   @Override
-  public synchronized void onResume() {
-    super.onResume();
+  public synchronized void onPause() {
+    super.onPause();
+    confidenceTimer.cancel();
+    timerRunning = false;
+    bottomView.setBackgroundResource(R.color.colorPrimary);
+    countdownText.setText("");
   }
 
 }

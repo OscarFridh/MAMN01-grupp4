@@ -38,6 +38,15 @@
             android:background="@android:color/black"
             tools:context=".MainActivity"/>
 
+        <TextView
+            android:id="@+id/countdown_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textSize="200sp"
+            android:theme="@style/Platform.MaterialComponents.Light"/>
+
         <LinearLayout
             android:id="@+id/gesture_layout"
             android:layout_width="match_parent"

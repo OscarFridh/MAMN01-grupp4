@@ -121,7 +121,8 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   private Runnable imageConverter;
   protected TextView recognitionTextView,
       recognitionValueTextView;
-
+  protected TextView countdownText;
+  protected View bottomView;
   private Device device = Device.CPU;
   private int numThreads = -1;
 
@@ -140,6 +141,8 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     }
 
     poiDb = PoiDb.getDb();
+    bottomView = root.findViewById(R.id.gesture_layout);
+    countdownText = root.findViewById(R.id.countdown_text);
     recognitionTextView = root.findViewById(R.id.detected_item);
     recognitionValueTextView = root.findViewById(R.id.detected_item_value);
     return root;
@@ -459,15 +462,12 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
       Recognition recognition = results.get(0);
       if (recognition != null) {
         if (recognition.getTitle() != null) recognitionTextView.setText(recognition.getTitle());
-        if (recognition.getConfidence() != null)
-          recognitionValueTextView.setText(
-              String.format("%.2f", (100 * recognition.getConfidence())) + "%");
       }
     }
   }
 
-  protected void showPopup(Recognition result){
-    if(poiDb.get(result.getTitle()).isAnswered ){
+  protected void showPopup(String result){
+    if(poiDb.get(result).isAnswered ){
       showingDialog = true;
       AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
       alertDialog.setTitle("Alert");
@@ -488,16 +488,16 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
       alertDialog.show();
     }else {
       try {
-        poiDb.get(result.getTitle()).isAnswered = true;
-        LOGGER.e("%s found", result.getTitle());
+        poiDb.get(result).isAnswered = true;
+        LOGGER.e("%s found", result);
         Intent intent = new Intent(getActivity(), QuizActivity.class);
         Bundle b = new Bundle();
-        b.putString("poi", result.getTitle());
+        b.putString("poi", result);
         intent.putExtras(b);
         startActivityForResult(intent, 1);
       } catch (Exception e) {
         e.printStackTrace();
-        LOGGER.e("Error finding %s in database", result.getTitle());
+        LOGGER.e("Error finding %s in database", result);
       }
     }
   }
