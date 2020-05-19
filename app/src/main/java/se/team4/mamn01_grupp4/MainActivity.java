@@ -13,6 +13,8 @@ import android.content.res.AssetManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private int score = 0;
     private int bonusScore = 0;
     private int answeredQuestions = 0;
+    protected Handler handler;
     private NavController navController;
     private Logger LOGGER;
 
@@ -44,13 +47,16 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        PoiDb poiDb = new PoiDb(getAssets());
+        handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                PoiDb poiDb = new PoiDb(getAssets());
+            }
+        });
     }
+    
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
