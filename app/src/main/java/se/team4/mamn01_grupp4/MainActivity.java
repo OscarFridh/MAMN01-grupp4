@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private int score = 0;
     private int bonusScore = 0;
     private int answeredQuestions = 0;
+    private NavController navController;
     private Logger LOGGER;
 
     @Override
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_map, R.id.navigation_scan)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        if (count == 0) {
+        if (navController.getCurrentDestination() == navController.getGraph().findNode(R.id.navigation_home)) {
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("Warning");
             alertDialog.setMessage("Are you sure you want to exit the application?");
