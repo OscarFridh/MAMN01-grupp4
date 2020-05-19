@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -31,7 +34,8 @@ public class QuizActivity extends AppCompatActivity {
     private ImageView playButton;
     private TextView bonusText;
     private TextView bonusValue;
-    private TextView timeValue;
+    private Animation shake;
+    private ImageView phoneIcon;
     private ImageView greyWave;
     private ClipDrawable blueWaveClip;
     Handler myHandler;
@@ -111,6 +115,28 @@ public class QuizActivity extends AppCompatActivity {
                         }
 
                     }.start();
+
+                    phoneIcon = findViewById(R.id.phoneIcon);
+                    shake = AnimationUtils.loadAnimation(QuizActivity.this, R.anim.shake);
+                    shake.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            shake = AnimationUtils.loadAnimation(QuizActivity.this, R.anim.shake);
+                            shake.setAnimationListener(this);
+                            phoneIcon.startAnimation(shake);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    phoneIcon.startAnimation(shake);
+
                 } else{
                     LOGGER.e("Sound file not found");
                 }
@@ -124,6 +150,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void evaluateResult(boolean ans, int score){
+        phoneIcon.clearAnimation();
         if(poi.ans == ans){
             container.setBackgroundResource(R.drawable.gradient_green_background);
             questionView.setText("You got " + (score+5) + "points!");
