@@ -146,7 +146,6 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     bottomView = root.findViewById(R.id.gesture_layout);
     countdownText = root.findViewById(R.id.countdown_text);
     recognitionTextView = root.findViewById(R.id.detected_item);
-    recognitionValueTextView = root.findViewById(R.id.detected_item_value);
 
     vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
     return root;
