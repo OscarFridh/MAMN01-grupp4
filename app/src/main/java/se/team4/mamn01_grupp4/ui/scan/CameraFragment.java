@@ -459,16 +459,6 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     }
   }
 
-  @UiThread
-  protected void showResultsInBottomSheet(List<Recognition> results) {
-    if (results != null && results.size() >= 1) {
-      Recognition recognition = results.get(0);
-      if (recognition != null) {
-        if (recognition.getTitle() != null) recognitionTextView.setText(recognition.getTitle());
-      }
-    }
-  }
-
   protected void showPopup(String result){
     if(poiDb.get(result).isAnswered ){
       showingDialog = true;

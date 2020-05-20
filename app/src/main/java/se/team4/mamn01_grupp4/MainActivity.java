@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private int bonusScore = 0;
     private int answeredQuestions = 0;
     protected Handler handler;
+    private MenuItem homeMenuItem;
     private NavController navController;
     private Logger LOGGER;
 
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        homeMenuItem = navView.getMenu().findItem(R.id.navigation_home);
 
         handler = new Handler();
         handler.post(new Runnable() {
@@ -72,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
                     bonusScore += result-5;
                 }
                 answeredQuestions ++;
+                if(answeredQuestions == 1){
+                    homeMenuItem.setTitle("Correct");
+                    homeMenuItem.setIcon(R.drawable.ic_check_circle_black_24dp);
+                }
                 LOGGER.i("Current score is : %s", score);
             }
         } catch (Exception ex) {

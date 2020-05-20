@@ -84,10 +84,11 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
     }
 
     public void onFinish() {
-      timerRunning = false;
+      LOGGER.e("Opening quizactivity");
       countdownText.setText("");
       bottomView.setBackgroundResource(R.color.colorPrimary);
       showPopup(countDownName);
+      timerRunning = false;
     }
   };
 
@@ -157,7 +158,11 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
                     new Runnable() {
                       @Override
                       public void run() {
-                        showResultsInBottomSheet(results);
+                        if(lastConfidence > 70) {
+                          recognitionTextView.setText(lastResultName);
+                        } else{
+                          recognitionTextView.setText("No match");
+                        }
                       }
                     });
 
