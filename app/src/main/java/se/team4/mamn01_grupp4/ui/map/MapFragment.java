@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,6 +59,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private TextView scrollDesc;
     private TextView answeredText;
     private ImageView imageView;
+    private Button scanButton;
     private GoogleMap mMap;
     private LocationManager locationManager;
     LatLng myLatLng;
@@ -77,6 +81,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         scrollHeader = root.findViewById(R.id.scroll_header);
         scrollDesc = root.findViewById(R.id.scroll_text);
         answeredText = root.findViewById(R.id.question_answered);
+        scanButton = root.findViewById(R.id.scan_button);
+
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.navigation_scan);
+            }
+        });
 
         return root;
     }

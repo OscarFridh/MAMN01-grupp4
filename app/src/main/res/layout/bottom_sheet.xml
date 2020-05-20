@@ -64,6 +64,18 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/reference_image"/>
 
+        <Button
+            android:id="@+id/scan_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scan"
+            android:theme="@style/Platform.MaterialComponents"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/scroll_text"
+            app:layout_constraintRight_toRightOf="@id/scroll_text"
+            android:background="@color/colorPrimary"
+            android:paddingHorizontal="20dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
