@@ -218,7 +218,13 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
         return;
       }
 
-      if (isProcessingFrame || showingDialog) {
+      if(showingDialog){
+        image.close();
+        stopTimer();
+        return;
+      }
+
+      if (isProcessingFrame) {
         image.close();
         return;
       }
@@ -459,8 +465,8 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
     }
   }
 
-  protected void showPopup(String result){
-    if(poiDb.get(result).isAnswered ){
+  protected void showQuiz(String result){
+    if(poiDb.get(result).isAnswered){
       showingDialog = true;
       AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
       alertDialog.setTitle("Alert");
@@ -480,6 +486,7 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
       });
       alertDialog.show();
     }else {
+      showingDialog = true;
       try {
         poiDb.get(result).isAnswered = true;
         LOGGER.e("%s found", result);
@@ -504,6 +511,8 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   }
 
   protected abstract void processImage();
+
+  protected abstract void stopTimer();
 
   @Override
   public void onClick(View view) {

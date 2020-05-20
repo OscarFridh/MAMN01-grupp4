@@ -17,26 +17,16 @@
 package se.team4.mamn01_grupp4.ui.scan;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.media.ImageReader.OnImageAvailableListener;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.util.Size;
 import android.util.TypedValue;
-import android.view.TextureView;
-import android.widget.TextView;
 
-import se.team4.mamn01_grupp4.MainActivity;
-import se.team4.mamn01_grupp4.Poi;
-import se.team4.mamn01_grupp4.PoiDb;
 import se.team4.mamn01_grupp4.R;
 import se.team4.mamn01_grupp4.env.BorderedText;
 import se.team4.mamn01_grupp4.env.Logger;
@@ -45,7 +35,6 @@ import se.team4.mamn01_grupp4.tflite.Classifier.Device;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class ScanFragment extends CameraFragment implements OnImageAvailableListener {
   private static final Logger LOGGER = new Logger();
@@ -87,8 +76,8 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
       LOGGER.e("Opening quizactivity");
       countdownText.setText("");
       bottomView.setBackgroundResource(R.color.colorPrimary);
-      showPopup(countDownName);
       timerRunning = false;
+      showQuiz(countDownName);
     }
   };
 
@@ -148,9 +137,10 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
             LOGGER.v("Detect: %s", results);
 
             if(lastConfidence > popupWindowValue && !timerRunning){
+              timerRunning = true;
+              LOGGER.e("Timer started");
               countDownName = lastResultName;
               bottomView.setBackgroundResource(R.color.colorGreen);
-              timerRunning = true;
               confidenceTimer.start();
             }
 
@@ -172,6 +162,11 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
       }
     };
     runInBackground(processTask);
+  }
+
+  @Override
+  protected void stopTimer() {
+    confidenceTimer.cancel();
   }
 
   @Override
@@ -201,11 +196,11 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
 
   @Override
   public synchronized void onPause() {
-    super.onPause();
     confidenceTimer.cancel();
     timerRunning = false;
     bottomView.setBackgroundResource(R.color.colorPrimary);
     countdownText.setText("");
+    super.onPause();
   }
 
 }
