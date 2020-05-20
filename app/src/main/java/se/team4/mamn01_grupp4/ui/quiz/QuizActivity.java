@@ -46,6 +46,7 @@ public class QuizActivity extends AppCompatActivity {
     private ImageView phoneIcon;
     private ImageView greyWave;
     private ClipDrawable blueWaveClip;
+    private boolean shouldAnimate = false;
     Handler myHandler;
     private Poi poi;
     private int bonusScore;
@@ -129,6 +130,7 @@ public class QuizActivity extends AppCompatActivity {
 
                     }.start();
 
+                    shouldAnimate = true;
                     phoneIcon = findViewById(R.id.phoneIcon);
                     shake = AnimationUtils.loadAnimation(QuizActivity.this, R.anim.shake);
                     shake.setAnimationListener(new Animation.AnimationListener() {
@@ -138,9 +140,11 @@ public class QuizActivity extends AppCompatActivity {
 
                         @Override
                         public void onAnimationEnd(Animation animation) {
-                            shake = AnimationUtils.loadAnimation(QuizActivity.this, R.anim.shake);
-                            shake.setAnimationListener(this);
-                            phoneIcon.startAnimation(shake);
+                            if(shouldAnimate) {
+                                shake = AnimationUtils.loadAnimation(QuizActivity.this, R.anim.shake);
+                                shake.setAnimationListener(this);
+                                phoneIcon.startAnimation(shake);
+                            }
                         }
 
                         @Override
@@ -163,7 +167,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void evaluateResult(boolean ans, int score){
-        phoneIcon.clearAnimation();
+        shouldAnimate = false;
         player.stop();
         if(poi.ans == ans){
             player = MediaPlayer.create(this, R.raw.win);
@@ -198,8 +202,9 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onPause() {
+        shouldAnimate = false;
+        super.onPause();
 
     }
 
