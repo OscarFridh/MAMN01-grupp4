@@ -7,7 +7,12 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ClipDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -35,7 +40,7 @@ import se.team4.mamn01_grupp4.PoiDb;
 import se.team4.mamn01_grupp4.R;
 import se.team4.mamn01_grupp4.env.Logger;
 
-public class QuizActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity implements SensorEventListener {
 
     MediaPlayer player;
     private ImageView playButton;
@@ -54,6 +59,8 @@ public class QuizActivity extends AppCompatActivity {
     TextView questionView;
     TextView locationView;
     Logger LOGGER;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
 
     CountDownTimer scoreCounter = new CountDownTimer(20000, 2000) {
 
@@ -75,6 +82,15 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_quiz);
+
+        //Creates the sensor manager
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+
+        //Creates sensor
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        //Create sensor listener
+        mSensorManager.registerListener(this, mAccelerometer,mSensorManager.SENSOR_DELAY_NORMAL);
 
         LOGGER = new Logger();
 
@@ -219,4 +235,22 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+            if (event.values[0] > 5) {
+                container.setBackgroundResource(R.drawable.gradient_red_background);
+            } else if (event.values[0] < -5) {
+                container.setBackgroundResource(R.drawable.gradient_green_background);
+            }
+            else{
+                container.setBackgroundResource(R.drawable.gradient_background);
+        }
+        }
+
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
