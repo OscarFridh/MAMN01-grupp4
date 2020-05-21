@@ -76,6 +76,18 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
         }
 
     };
+    private CountDownTimer musicTimer = new CountDownTimer(60000, 100) {
+
+        public void onTick(long millisUntilFinished) {
+            blueWaveClip.setLevel((int)((60000 - millisUntilFinished)/6));
+        }
+
+        public void onFinish() {
+            blueWaveClip.setLevel(0);
+            evaluateResult(!poi.ans, 0);
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,18 +142,7 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
                 if(player != null){
                     player.start();
                     scoreCounter.start();
-                    new CountDownTimer(60000, 100) {
-
-                        public void onTick(long millisUntilFinished) {
-                            blueWaveClip.setLevel((int)((60000 - millisUntilFinished)/6));
-                        }
-
-                        public void onFinish() {
-                            blueWaveClip.setLevel(0);
-                            evaluateResult(!poi.ans, 0);
-                        }
-
-                    }.start();
+                    musicTimer.start();
 
                     //Create sensor listener
                     mSensorManager.registerListener(QuizActivity.this, mAccelerometer,mSensorManager.SENSOR_DELAY_NORMAL);
@@ -185,7 +186,7 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
     private void evaluateResult(boolean ans, int bonus){
         shouldAnimate = false;
         player.stop();
-        scoreCounter.cancel();
+        musicTimer.cancel();
         int finalScore = 0;
         if(poi.ans == ans){
             player = MediaPlayer.create(this, R.raw.win);
