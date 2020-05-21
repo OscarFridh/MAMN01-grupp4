@@ -66,7 +66,7 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
 
         public void onTick(long millisUntilFinished) {
             bonusValue.setText(String.valueOf(millisUntilFinished / 2000));
-            bonusScore = (int) (millisUntilFinished / 1000);
+            bonusScore = (int) (millisUntilFinished / 2000);
         }
 
         public void onFinish() {
@@ -88,9 +88,6 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
 
         //Creates sensor
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-        //Create sensor listener
-        mSensorManager.registerListener(this, mAccelerometer,mSensorManager.SENSOR_DELAY_NORMAL);
 
         LOGGER = new Logger();
 
@@ -146,6 +143,9 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
 
                     }.start();
 
+                    //Create sensor listener
+                    mSensorManager.registerListener(QuizActivity.this, mAccelerometer,mSensorManager.SENSOR_DELAY_NORMAL);
+
                     shouldAnimate = true;
                     phoneIcon = findViewById(R.id.phoneIcon);
                     shake = AnimationUtils.loadAnimation(QuizActivity.this, R.anim.shake);
@@ -182,14 +182,17 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    private void evaluateResult(boolean ans, int score){
+    private void evaluateResult(boolean ans, int bonus){
         shouldAnimate = false;
         player.stop();
+        scoreCounter.cancel();
+        int finalScore = 0;
         if(poi.ans == ans){
             player = MediaPlayer.create(this, R.raw.win);
             vibrator.vibrate(VibrationEffect.createWaveform(new long[]{0,100,100,100}, -1));
             container.setBackgroundResource(R.drawable.gradient_green_background);
-            questionView.setText("You got " + (score+5) + "points!");
+            questionView.setText("You got " + (bonus+5) + "points!");
+            finalScore = bonus+5;
         } else {
             player = MediaPlayer.create(this, R.raw.loose);
             vibrator.vibrate(VibrationEffect.createWaveform(new long[]{0,400,200,400}, -1));
@@ -198,7 +201,7 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
         }
 
         Intent intent = getIntent();
-        intent.putExtra("result", score + bonusScore);
+        intent.putExtra("result", finalScore);
         setResult(RESULT_OK, intent);
 
         myHandler.postDelayed(new Runnable() {
@@ -238,15 +241,14 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-            if (event.values[0] > 5) {
-                container.setBackgroundResource(R.drawable.gradient_red_background);
-            } else if (event.values[0] < -5) {
-                container.setBackgroundResource(R.drawable.gradient_green_background);
-            }
-            else{
-                container.setBackgroundResource(R.drawable.gradient_background);
+        if (event.values[0] > 5) {
+            evaluateResult(false, bonusScore);
+            mSensorManager.unregisterListener(this);
+        } else if (event.values[0] < -5) {
+            evaluateResult(true, bonusScore);
+            mSensorManager.unregisterListener(this);
         }
-        }
+    }
 
 
     @Override
