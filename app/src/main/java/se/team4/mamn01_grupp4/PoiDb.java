@@ -36,7 +36,7 @@ public class PoiDb{
             String data = myReader.nextLine();
             String[] values = data.split(";");
             boolean ans;
-            if(values[4] == "ja"){
+            if(values[4].equals("ja")){
             ans = true;
             } else {
                 ans = false;

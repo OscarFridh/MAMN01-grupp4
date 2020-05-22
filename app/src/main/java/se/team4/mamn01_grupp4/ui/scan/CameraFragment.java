@@ -293,6 +293,7 @@ public abstract class CameraFragment extends androidx.fragment.app.Fragment
   @Override
   public synchronized void onPause() {
     LOGGER.d("onPause " + this);
+    showingDialog = false;
     handlerThread.quitSafely();
     try {
       handlerThread.join();

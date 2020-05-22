@@ -136,7 +136,7 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
             lastResultName = results.get(0).getTitle();
             LOGGER.v("Detect: %s", results);
 
-            if(lastConfidence > popupWindowValue && !timerRunning){
+            if(lastConfidence > popupWindowValue && !timerRunning && !lastResultName.equals("background")){
               timerRunning = true;
               LOGGER.e("Timer started");
               countDownName = lastResultName;
@@ -148,7 +148,7 @@ public class ScanFragment extends CameraFragment implements OnImageAvailableList
                     new Runnable() {
                       @Override
                       public void run() {
-                        if(lastConfidence > 70) {
+                        if(lastConfidence > 70 && !lastResultName.equals("background")) {
                           recognitionTextView.setText(lastResultName);
                         } else{
                           recognitionTextView.setText("No match");

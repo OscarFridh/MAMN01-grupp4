@@ -103,7 +103,8 @@ public abstract class Classifier {
    */
   public static Classifier create(Activity activity, Device device, int numThreads)
       throws IOException {
-      return new ClassifierQuantizedMobileNet(activity, device, numThreads);
+      //return new ClassifierQuantizedMobileNet(activity, device, numThreads);
+      return new ClassifierFloatMobileNet(activity, device, numThreads);
   }
 
   /** An immutable result returned by a Classifier describing what was recognized. */
