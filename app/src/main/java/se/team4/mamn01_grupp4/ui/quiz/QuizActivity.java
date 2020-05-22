@@ -242,10 +242,10 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if (event.values[0] > 5) {
+        if (event.values[0] < -12) {
             evaluateResult(false, bonusScore);
             mSensorManager.unregisterListener(this);
-        } else if (event.values[0] < -5) {
+        } else if (event.values[0] > 12) {
             evaluateResult(true, bonusScore);
             mSensorManager.unregisterListener(this);
         }
