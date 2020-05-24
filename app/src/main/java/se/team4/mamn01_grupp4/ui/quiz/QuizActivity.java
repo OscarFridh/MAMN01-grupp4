@@ -238,11 +238,13 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
             return;
         }
 
-        if (event.values[0] < -12) {
+        float threshold = 5;
+
+        if (event.values[0] < -threshold) {
             Log.d("QuizActivity", "Right shake: " + event.values[0]);
             evaluateResult(true, bonusScore);
             mSensorManager.unregisterListener(this);
-        } else if (event.values[0] > 12) {
+        } else if (event.values[0] > threshold) {
             Log.d("QuizActivity", "Left shake: " + event.values[0]);
             evaluateResult(false, bonusScore);
             mSensorManager.unregisterListener(this);
