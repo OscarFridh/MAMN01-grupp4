@@ -1,39 +1,30 @@
 package se.team4.mamn01_grupp4.ui.quiz;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ClipDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.Image;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.io.IOException;
 
 import se.team4.mamn01_grupp4.Poi;
 import se.team4.mamn01_grupp4.PoiDb;
@@ -242,11 +233,18 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
+        if (event.sensor != mAccelerometer) {
+            Log.d("QuizActivity", "Unexpected sensor event");
+            return;
+        }
+
         if (event.values[0] < -12) {
-            evaluateResult(false, bonusScore);
+            Log.d("QuizActivity", "Right shake: " + event.values[0]);
+            evaluateResult(true, bonusScore);
             mSensorManager.unregisterListener(this);
         } else if (event.values[0] > 12) {
-            evaluateResult(true, bonusScore);
+            Log.d("QuizActivity", "Left shake: " + event.values[0]);
+            evaluateResult(false, bonusScore);
             mSensorManager.unregisterListener(this);
         }
     }
