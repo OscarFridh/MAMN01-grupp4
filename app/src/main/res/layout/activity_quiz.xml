@@ -137,7 +137,7 @@
     android:layout_width="wrap_content"
     android:layout_marginTop="30dp"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_phone_android_black_24dp"
+    android:background="@drawable/ic_phone_android_black_24dp"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintTop_toBottomOf="@id/bonusContainer"

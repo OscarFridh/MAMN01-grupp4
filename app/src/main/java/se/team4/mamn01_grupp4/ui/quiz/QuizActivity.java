@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ClipDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -38,11 +39,10 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
     private TextView bonusText;
     private TextView bonusValue;
     private Vibrator vibrator;
-    private Animation shake;
     private ImageView phoneIcon;
+    private AnimationDrawable tiltAnim;
     private ImageView greyWave;
     private ClipDrawable blueWaveClip;
-    private boolean shouldAnimate = false;
     Handler myHandler;
     private Poi poi;
     private int bonusScore;
@@ -138,29 +138,10 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
                     //Create sensor listener
                     mSensorManager.registerListener(QuizActivity.this, mAccelerometer,mSensorManager.SENSOR_DELAY_NORMAL);
 
-                    shouldAnimate = true;
                     phoneIcon = findViewById(R.id.phoneIcon);
-                    shake = AnimationUtils.loadAnimation(QuizActivity.this, R.anim.shake);
-                    shake.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            if(shouldAnimate) {
-                                shake = AnimationUtils.loadAnimation(QuizActivity.this, R.anim.shake);
-                                shake.setAnimationListener(this);
-                                phoneIcon.startAnimation(shake);
-                            }
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                    phoneIcon.startAnimation(shake);
+                    phoneIcon.setBackgroundResource(R.drawable.tilt);
+                    tiltAnim = (AnimationDrawable) phoneIcon.getBackground();
+                    tiltAnim.start();
 
                 } else{
                     LOGGER.e("Sound file not found");
@@ -175,7 +156,9 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void evaluateResult(boolean ans, int bonus){
-        shouldAnimate = false;
+        if(tiltAnim != null){
+            tiltAnim.stop();
+        }
         player.stop();
         musicTimer.cancel();
         int finalScore = 0;
@@ -210,13 +193,6 @@ public class QuizActivity extends AppCompatActivity implements SensorEventListen
                 finish();
             }
         }, 3000);
-    }
-
-    @Override
-    protected void onPause() {
-        shouldAnimate = false;
-        super.onPause();
-
     }
 
     @Override

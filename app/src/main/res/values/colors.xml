@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#202d3b</color>
     <color name="colorAccent">#03DAC5</color>
 
-    <color name="colorGreen">#202d3b</color>
+    <color name="colorGreen">#008000</color>
 
     <color name="black_overlay">#66000000</color>
 </resources>
