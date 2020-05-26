@@ -30,9 +30,9 @@
 
     When you have reached a location, navigate to the scan-window to scan the object with your camera.\n\n
 
-    Once a question have been opened, make sure you have media-sound turned on in your phone and press play to start the question. Answer the question by shaking the phone in either direction.\n\n
+    Once a question have been opened, press play to start the question. Answer the question by tilting the phone in either direction.\n\n
 
-    When you have answered as many questions you like, head back to this page for instructions on how to grade the quiz.</string>
+    When you have answered as many questions you like, go back here to grade the quiz.</string>
 
     <string name="text_score">You scored:</string>
     <string name="slash">/</string>
